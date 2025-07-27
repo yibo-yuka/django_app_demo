@@ -1,0 +1,69 @@
+# numbeo/models.py
+from django.db import models
+
+class CostOfLiving(models.Model):
+    """
+    這個模型對應到您的生活成本數據。
+    欄位名稱應該要和您資料庫中的欄位名稱相符。
+    我會根據您提供的 CSV 檔案欄位來建立模型。
+    """
+    country_name = models.CharField(max_length=255, unique=True, primary_key=True, verbose_name="國家名稱")
+    meal_inexpensive_restaurant = models.CharField(max_length=255, null=True, blank=True, verbose_name="平價餐廳單人餐點")
+    meal_for_2_people_mid_range_restaurant = models.CharField(max_length=255, null=True, blank=True, verbose_name="中價位餐廳雙人三道菜")
+    mcmeal_at_mcdonalds = models.CharField(max_length=255, null=True, blank=True, verbose_name="麥當勞套餐")
+    cappuccino_regular = models.CharField(max_length=255, null=True, blank=True, verbose_name="卡布奇諾 (標準)")
+    coke_pepsi_0_33_liter_bottle = models.CharField(max_length=255, null=True, blank=True, verbose_name="可樂/百事 (0.33公升瓶裝)")
+    water_0_33_liter_bottle = models.CharField(max_length=255, null=True, blank=True, verbose_name="水 (0.33公升瓶裝)")
+    milk_regular_1_liter = models.CharField(max_length=255, null=True, blank=True, verbose_name="牛奶 (1公升)")
+    loaf_of_fresh_white_bread_500g = models.CharField(max_length=255, null=True, blank=True, verbose_name="新鮮白麵包 (500克)")
+    rice_white_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="米 (1公斤)")
+    eggs_regular_12 = models.CharField(max_length=255, null=True, blank=True, verbose_name="雞蛋 (12顆)")
+    local_cheese_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="本地起司 (1公斤)")
+    chicken_fillets_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="雞胸肉 (1公斤)")
+    apples_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="蘋果 (1公斤)")
+    banana_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="香蕉 (1公斤)")
+    oranges_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="橘子 (1公斤)")
+    tomato_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="番茄 (1公斤)")
+    potato_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="馬鈴薯 (1公斤)")
+    onion_1kg = models.CharField(max_length=255, null=True, blank=True, verbose_name="洋蔥 (1公斤)")
+    lettuce_1_head = models.CharField(max_length=255, null=True, blank=True, verbose_name="生菜 (1顆)")
+    water_1_5_liter_bottle = models.CharField(max_length=255, null=True, blank=True, verbose_name="水 (1.5公升瓶裝)")
+    cigarettes_20_pack_marlboro = models.CharField(max_length=255, null=True, blank=True, verbose_name="香菸20支 (萬寶路)")
+    one_way_ticket_local_transport = models.CharField(max_length=255, null=True, blank=True, verbose_name="單程票 (本地交通)")
+    monthly_pass_regular_price = models.CharField(max_length=255, null=True, blank=True, verbose_name="月票 (標準價格)")
+    taxi_start_normal_tariff = models.CharField(max_length=255, null=True, blank=True, verbose_name="計程車起步價")
+    taxi_1km_normal_tariff = models.CharField(max_length=255, null=True, blank=True, verbose_name="計程車每公里價格")
+    taxi_1hour_waiting_normal_tariff = models.CharField(max_length=255, null=True, blank=True, verbose_name="計程車等待1小時")
+    gasoline_1_liter = models.CharField(max_length=255, null=True, blank=True, verbose_name="汽油 (1公升)")
+    volkswagen_golf_1_4_90_kw_trendline = models.CharField(max_length=255, null=True, blank=True, verbose_name="福斯 Golf 1.4 或同級新車")
+    toyota_corolla_sedan_1_6l_97kw_comfort = models.CharField(max_length=255, null=True, blank=True, verbose_name="豐田 Corolla 1.6l 或同級新車")
+    basic_electricity_heating_cooling_water_garbage_for_85m2_apartment = models.CharField(max_length=255, null=True, blank=True, verbose_name="基本費用 (85m2 公寓)")
+    mobile_phone_monthly_plan_with_calls_and_10gb_data = models.CharField(max_length=255, null=True, blank=True, verbose_name="手機月租 (含通話和10GB+數據)")
+    internet_60_mbps_or_more_unlimited_data_cable_adsl = models.CharField(max_length=255, null=True, blank=True, verbose_name="網路 (60 Mbps 以上)")
+    fitness_club_monthly_fee_for_1_adult = models.CharField(max_length=255, null=True, blank=True, verbose_name="健身俱樂部月費")
+    tennis_court_rent_1_hour_on_weekend = models.CharField(max_length=255, null=True, blank=True, verbose_name="網球場租金 (週末1小時)")
+    cinema_international_release_1_seat = models.CharField(max_length=255, null=True, blank=True, verbose_name="電影票 (國際發行)")
+    preschool_or_kindergarten_full_day_private_monthly_for_1_child = models.CharField(max_length=255, null=True, blank=True, verbose_name="私立幼稚園月費")
+    international_primary_school_yearly_for_1_child = models.CharField(max_length=255, null=True, blank=True, verbose_name="國際小學年費")
+    one_pair_of_jeans_levis_501_or_similar = models.CharField(max_length=255, null=True, blank=True, verbose_name="牛仔褲 (Levis 501 或類似)")
+    one_summer_dress_in_a_chain_store_zara_h_m = models.CharField(max_length=255, null=True, blank=True, verbose_name="連衣裙 (Zara, H&M 等連鎖店)")
+    one_pair_of_nike_running_shoes_mid_range = models.CharField(max_length=255, null=True, blank=True, verbose_name="運動鞋 (Nike 中價位)")
+    one_pair_of_men_s_leather_business_shoes = models.CharField(max_length=255, null=True, blank=True, verbose_name="男士皮鞋")
+    apartment_1_bedroom_in_city_centre = models.CharField(max_length=255, null=True, blank=True, verbose_name="公寓 (1房) 市中心月租")
+    apartment_1_bedroom_outside_of_centre = models.CharField(max_length=255, null=True, blank=True, verbose_name="公寓 (1房) 非市中心月租")
+    apartment_3_bedrooms_in_city_centre = models.CharField(max_length=255, null=True, blank=True, verbose_name="公寓 (3房) 市中心月租")
+    apartment_3_bedrooms_outside_of_centre = models.CharField(max_length=255, null=True, blank=True, verbose_name="公寓 (3房) 非市中心月租")
+    price_per_square_meter_to_buy_apartment_in_city_centre = models.CharField(max_length=255, null=True, blank=True, verbose_name="購買公寓每平方米價格 (市中心)")
+    price_per_square_meter_to_buy_apartment_outside_of_centre = models.CharField(max_length=255, null=True, blank=True, verbose_name="購買公寓每平方米價格 (非市中心)")
+    average_monthly_net_salary_after_tax = models.CharField(max_length=255, null=True, blank=True, verbose_name="平均月淨收入 (稅後)")
+    mortgage_interest_rate_in_percent_yearly_for_20_years_fixed_rate = models.FloatField(null=True, blank=True, verbose_name="房貸利率 (%)")
+
+    class Meta:
+        # 指定 Django ORM 使用的資料表名稱
+        db_table = 'cost_of_living_data' 
+        verbose_name = "生活成本數據"
+        verbose_name_plural = "生活成本數據"
+
+    def __str__(self):
+        return self.country_name
+

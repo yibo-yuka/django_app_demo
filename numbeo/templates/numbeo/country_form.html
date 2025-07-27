@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>選擇國家</title>
+</head>
+<body>
+
+    <h1>請從下方選擇一個國家</h1>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        <label for="country-select">國家：</label>
+        <select name="country" id="country-select">
+            <option value="">--請選擇--</option>
+            
+            <option value="Taiwan">Taiwan</option>
+            <option value="Japan">Japan</option>
+            <option value="United States">United States</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="France">France</option>
+            <option value="Germany">Germany</option>
+            </select>
+        
+        <br><br>
+        <button type="submit">提交</button>
+    </form>
+
+</body>
+</html>
