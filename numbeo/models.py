@@ -7,6 +7,7 @@ class CostOfLiving(models.Model):
     欄位名稱應該要和您資料庫中的欄位名稱相符。
     我會根據您提供的 CSV 檔案欄位來建立模型。
     """
+    """
     country_name = models.CharField(max_length=255, unique=True, primary_key=True, verbose_name="國家名稱")
     meal_inexpensive_restaurant = models.CharField(max_length=255, null=True, blank=True, verbose_name="平價餐廳單人餐點")
     meal_for_2_people_mid_range_restaurant = models.CharField(max_length=255, null=True, blank=True, verbose_name="中價位餐廳雙人三道菜")
@@ -57,7 +58,13 @@ class CostOfLiving(models.Model):
     price_per_square_meter_to_buy_apartment_outside_of_centre = models.CharField(max_length=255, null=True, blank=True, verbose_name="購買公寓每平方米價格 (非市中心)")
     average_monthly_net_salary_after_tax = models.CharField(max_length=255, null=True, blank=True, verbose_name="平均月淨收入 (稅後)")
     mortgage_interest_rate_in_percent_yearly_for_20_years_fixed_rate = models.FloatField(null=True, blank=True, verbose_name="房貸利率 (%)")
-
+    """
+    country_name = models.CharField(max_length=255, unique=True, primary_key=True, verbose_name="國家名稱")
+    apples_1kg = models.FloatField(max_length=255, null=True, blank=True, verbose_name="蘋果 (1公斤)")
+    banana_1kg = models.FloatField(max_length=255, null=True, blank=True, verbose_name="香蕉 (1公斤)")
+    oranges_1kg = models.FloatField(max_length=255, null=True, blank=True, verbose_name="橘子 (1公斤)")
+    tomato_1kg = models.FloatField(max_length=255, null=True, blank=True, verbose_name="番茄 (1公斤)")
+    
     class Meta:
         # 指定 Django ORM 使用的資料表名稱
         db_table = 'cost_of_living_data' 
