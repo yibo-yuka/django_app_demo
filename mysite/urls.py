@@ -23,5 +23,6 @@ urlpatterns = [
     path("wine/", include("wine_type.urls")),
     #path("numbeo/", include("numbeo.urls")),
     path('api/numbeo/', include('numbeo.urls')),
+    path('api/tracker/', include('material_tracker.urls')),
     path('admin/', admin.site.urls)
 ]

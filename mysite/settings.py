@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "polls.apps.PollsConfig",
     "wine_type.apps.WineTypeConfig",
     "numbeo.apps.NumbeoConfig",
+    "material_tracker.apps.MaterialTrackerConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

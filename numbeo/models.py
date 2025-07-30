@@ -59,6 +59,7 @@ class CostOfLiving(models.Model):
     average_monthly_net_salary_after_tax = models.CharField(max_length=255, null=True, blank=True, verbose_name="平均月淨收入 (稅後)")
     mortgage_interest_rate_in_percent_yearly_for_20_years_fixed_rate = models.FloatField(null=True, blank=True, verbose_name="房貸利率 (%)")
     """
+    
     country_name = models.CharField(max_length=255, unique=True, primary_key=True, verbose_name="國家名稱")
     apples_1kg = models.FloatField(max_length=255, null=True, blank=True, verbose_name="蘋果 (1公斤)")
     banana_1kg = models.FloatField(max_length=255, null=True, blank=True, verbose_name="香蕉 (1公斤)")
