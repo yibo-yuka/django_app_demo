@@ -8,31 +8,30 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: Production 
+    
+    # 🚀 強制使用 Node.js 24 以解決 Deprecation 警告
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      # 1. 檢出程式碼 (升級至 v4)
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. 認證 GCP (升級至 v2)
       - name: Google Auth
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      # 3. 設定 Docker 認證
       - name: Docker Auth
         run: |
           gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
 
-      # 4. 構建並推送映像檔
       - name: Build and Push Docker Image
         run: |
           IMAGE_NAME=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
-      # 5. 透過 SSH 登入 VM 並更新容器
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
         with:
