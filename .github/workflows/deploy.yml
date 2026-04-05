@@ -7,26 +7,25 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    # 宣告使用的 GitHub Environment 名稱
     environment: Production 
 
     steps:
-      # 1. 檢出程式碼 (這必須是第一步，否則 Docker 找不到 Dockerfile)
+      # 1. 檢出程式碼 (升級至 v4)
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2. 認證 GCP (使用 Environment Secret)
+      # 2. 認證 GCP (升級至 v2)
       - name: Google Auth
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      # 3. 設定 Docker 認證 (使用 Repository Variable)
+      # 3. 設定 Docker 認證
       - name: Docker Auth
         run: |
           gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
 
-      # 4. 構建並推送映像檔 (使用 vars 提高靈活性)
+      # 4. 構建並推送映像檔
       - name: Build and Push Docker Image
         run: |
           IMAGE_NAME=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest
@@ -41,24 +40,12 @@ jobs:
           username: ${{ vars.VM_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # 變數定義，方便維護
             IMAGE_NAME=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest
-            
-            # 認證 VM 內的 Docker
             gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev -q
-            
-            # 停止並移除舊容器
             docker stop django-app || true
             docker rm django-app || true
-            
-            # 清理舊的映像檔 (節省空間)
             docker image prune -f
-            
-            # 拉取新映像檔
             docker pull $IMAGE_NAME
-            
-            # 啟動新容器
-            # 這裡加入了 DJANGO_SECRET_KEY 與 DATABASE_URL
             docker run -d --name django-app \
               -p 8000:8000 \
               -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
