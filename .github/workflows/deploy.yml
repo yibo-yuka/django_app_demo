@@ -24,9 +24,13 @@ jobs:
 
       - name: Build and Push Image
         run: |
-          IMAGE_NAME=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest
-          docker build -t $IMAGE_NAME .
-          docker push $IMAGE_NAME
+          # 使用變數簡化路徑，避免拼錯
+          REGISTRY="${{ vars.GCP_REGION }}-docker.pkg.dev"
+          IMAGE_PATH="${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest"
+          FULL_IMAGE_NAME="$REGISTRY/$IMAGE_PATH"
+          
+          docker build -t $FULL_IMAGE_NAME .
+          docker push $FULL_IMAGE_NAME
 
       - name: Deploy to VM via SSH
         uses: appleboy/ssh-action@master
@@ -35,12 +39,22 @@ jobs:
           username: ${{ vars.VM_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            IMAGE_NAME=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest
-            gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev -q
+            REGISTRY="${{ vars.GCP_REGION }}-docker.pkg.dev"
+            IMAGE_PATH="${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest"
+            FULL_IMAGE_NAME="$REGISTRY/$IMAGE_PATH"
+
+            # 登入 GCP Docker 倉庫
+            gcloud auth configure-docker $REGISTRY -q
+            
+            # 停止並清理舊容器與無用映像檔 (釋放空間)
             docker stop django-app || true
             docker rm django-app || true
-            docker pull $IMAGE_NAME
+            docker image prune -f
+            
+            # 拉取並運行
+            docker pull $FULL_IMAGE_NAME
             docker run -d --name django-app -p 8000:8000 \
               -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
               -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-              $IMAGE_NAME
+              -e DJANGO_DEBUG="False" \
+              $FULL_IMAGE_NAME
