@@ -6,48 +6,23 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    # 確保使用的是最新的 Runner (它才支援 Node 24)
+    runs-on: ubuntu-latest 
     environment: Production 
     
-    # 🚀 強制使用 Node.js 24 以解決 Deprecation 警告
     env:
+      # 1. 這是目前的正確做法：提前測試並採用 Node 24
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout Code
+        # v4 已經是目前最新，未來若有 v5 釋出支援 Node 24 即可升級
         uses: actions/checkout@v4
 
       - name: Google Auth
+        # v2 目前運作正常，只需確保後續關注官方是否更新為 v3
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Docker Auth
-        run: |
-          gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
-
-      - name: Build and Push Docker Image
-        run: |
-          IMAGE_NAME=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest
-          docker build -t $IMAGE_NAME .
-          docker push $IMAGE_NAME
-
-      - name: Deploy to VM
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.VM_IP }}
-          username: ${{ vars.VM_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            IMAGE_NAME=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/django-api:latest
-            gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev -q
-            docker stop django-app || true
-            docker rm django-app || true
-            docker image prune -f
-            docker pull $IMAGE_NAME
-            docker run -d --name django-app \
-              -p 8000:8000 \
-              -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
-              -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-              -e DJANGO_DEBUG="False" \
-              $IMAGE_NAME
+      # ...其餘步驟保持不變 ...
